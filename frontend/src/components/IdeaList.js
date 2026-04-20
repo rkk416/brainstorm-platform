@@ -3,7 +3,7 @@ import api from "../api/api"
 import VoteButton from "./VoteButton"
 import { io } from "socket.io-client"
 
-const socket = io("http://localhost:5000")
+const socket = io("https://brainstorm-backend-m8li.onrender.com")
 
 function IdeaList({ sessionId, user }) {
 
