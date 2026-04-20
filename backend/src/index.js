@@ -11,7 +11,6 @@ const userRoutes = require("./routes/users")
 const sessionRoutes = require("./routes/sessions")
 const reportRoutes = require("./routes/report")
 const createAdmin = require("./utils/createAdmin")
-const cors = require("cors")
 
 const app = express()
 
@@ -24,9 +23,6 @@ app.use("/votes", voteRoutes)
 app.use("/users", userRoutes)
 app.use("/sessions", sessionRoutes)
 app.use("/report",reportRoutes)
-app.use(cors({
-  origin: "*"
-}))
 
 
 // Create HTTP server
