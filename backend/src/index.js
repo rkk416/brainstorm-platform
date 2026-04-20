@@ -14,7 +14,9 @@ const createAdmin = require("./utils/createAdmin")
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: "https://brainstorm-platform-g7lr59e0u-rkk416s-projects.vercel.app"
+}))
 app.use(express.json())
 
 // Routes
