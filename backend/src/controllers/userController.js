@@ -1,4 +1,4 @@
-const db = require("../config/db")
+const { pool } = require("../config/db")
 const bcrypt = require("bcrypt")
 
 // REGISTER
@@ -11,7 +11,7 @@ const registerUser = async (req, res) => {
     }
 
     // check existing user
-    const existingUser = await db.query(
+    const existingUser = await pool.query(
       "SELECT * FROM users WHERE email=$1",
       [email]
     )
@@ -30,7 +30,7 @@ const registerUser = async (req, res) => {
     }
 
     // insert user
-    const newUser = await db.query(
+    const newUser = await pool.query(
       "INSERT INTO users(name,email,password,role) VALUES($1,$2,$3,$4) RETURNING *",
       [name, email, hashedPassword, role]
     )
@@ -53,7 +53,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "All fields required" })
     }
 
-    const user = await db.query(
+    const user = await pool.query(
       "SELECT * FROM users WHERE email=$1",
       [email]
     )
