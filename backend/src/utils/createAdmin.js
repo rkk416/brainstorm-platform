@@ -1,10 +1,10 @@
-const { pool } = require("../config/db")
+const db = require("../config/db")
 const bcrypt = require("bcrypt")
 
 const createAdmin = async () => {
   try {
 
-    const existing = await pool.query(
+    const existing = await db.query(
       "SELECT * FROM users WHERE email=$1",
       ["ramkrishn@gmail.com"]
     )
@@ -13,7 +13,7 @@ const createAdmin = async () => {
 
       const hashedPassword = await bcrypt.hash("12345", 10)
 
-      await pool.query(
+      await db.query(
         "INSERT INTO users (name,email,role,password) VALUES ($1,$2,$3,$4)",
         ["Ram Krishna", "ramkrishn@gmail.com", "admin", hashedPassword]
       )
