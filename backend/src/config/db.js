@@ -58,4 +58,4 @@ async function initDB() {
 }
 initDB()
 
-module.exports = pool
+module.exports = { pool, initDB }
