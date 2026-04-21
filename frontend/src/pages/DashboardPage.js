@@ -7,9 +7,13 @@ const [sessions,setSessions] = useState([])
 const [title,setTitle] = useState("")
 const [description,setDescription] = useState("")
 
-const loadSessions = async ()=>{
-const res = await api.get("/sessions")
-setSessions(res.data)
+const loadSessions = async () => {
+  try {
+    const res = await api.get("/sessions")
+    setSessions(res.data)
+  } catch (err) {
+    console.error("LOAD SESSIONS ERROR:", err.response?.data || err.message)
+  }
 }
 
 useEffect(()=>{
