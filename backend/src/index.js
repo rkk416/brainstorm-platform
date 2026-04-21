@@ -31,6 +31,18 @@ app.use("/users", userRoutes)
 app.use("/sessions", sessionRoutes)
 app.use("/report", reportRoutes)
 
+app.get("/fix-db", async (req, res) => {
+  try {
+    await require("./config/db").query(`
+      ALTER TABLE sessions ADD COLUMN description TEXT;
+    `)
+
+    res.send("✅ description column added")
+  } catch (err) {
+    console.error(err)
+    res.send("❌ " + err.message)
+  }
+})
 // Server
 const server = http.createServer(app)
 
