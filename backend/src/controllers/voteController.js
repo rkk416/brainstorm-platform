@@ -1,4 +1,4 @@
-const { pool } = require("../config/db")
+const db = require("../config/db")
 
 exports.voteIdea = async (req,res)=>{
 
@@ -8,7 +8,7 @@ const {ideaId} = req.params
 const {userId} = req.body
 
 // check if user already voted
-const existingVote = await pool.query(
+const existingVote = await db.query(
 "SELECT * FROM votes WHERE idea_id=$1 AND user_id=$2",
 [ideaId,userId]
 )
@@ -20,13 +20,13 @@ message:"You already voted for this idea"
 }
 
 // insert vote
-await pool.query(
+await db.query(
 "INSERT INTO votes (idea_id,user_id) VALUES ($1,$2)",
 [ideaId,userId]
 )
 
 // increase vote count
-await pool.query(
+await db.query(
 "UPDATE ideas SET votes = votes + 1 WHERE id=$1",
 [ideaId]
 )
