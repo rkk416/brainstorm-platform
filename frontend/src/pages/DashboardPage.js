@@ -21,8 +21,9 @@ const createSession = async ()=>{
 if(!title.trim()) return
 
 await api.post("/sessions",{
-title,
-description
+  title,
+  description,
+  userId: user?.id || 1
 })
 
 setTitle("")
