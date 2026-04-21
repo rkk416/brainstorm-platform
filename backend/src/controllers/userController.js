@@ -1,4 +1,4 @@
-const { pool } = require("../config/db")
+const db = require("../config/db")
 const bcrypt = require("bcrypt")
 
 // REGISTER
@@ -10,8 +10,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "All fields required" })
     }
 
-    // check existing user
-    const existingUser = await pool.query(
+    const existingUser = await db.query(
       "SELECT * FROM users WHERE email=$1",
       [email]
     )
@@ -20,17 +19,14 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" })
     }
 
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // assign role
     let role = "user"
     if (email === "admin@brainstorm.com") {
       role = "admin"
     }
 
-    // insert user
-    const newUser = await pool.query(
+    const newUser = await db.query(
       "INSERT INTO users(name,email,password,role) VALUES($1,$2,$3,$4) RETURNING *",
       [name, email, hashedPassword, role]
     )
@@ -43,7 +39,6 @@ const registerUser = async (req, res) => {
   }
 }
 
-
 // LOGIN
 const loginUser = async (req, res) => {
   try {
@@ -53,25 +48,27 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "All fields required" })
     }
 
-    const user = await pool.query(
+    const result = await db.query(
       "SELECT * FROM users WHERE email=$1",
       [email]
     )
 
-    if (user.rows.length === 0) {
+    if (result.rows.length === 0) {
       return res.status(400).json({ message: "User not found" })
     }
 
-    const valid = await bcrypt.compare(password, user.rows[0].password)
+    const user = result.rows[0]
+
+    const valid = await bcrypt.compare(password, user.password)
 
     if (!valid) {
       return res.status(400).json({ message: "Invalid password" })
     }
 
-    res.json(user.rows[0])
+    res.json(user)
 
   } catch (err) {
-    console.error(err)
+    console.error("LOGIN ERROR:", err)
     res.status(500).json({ message: "Server error" })
   }
 }
