@@ -1,34 +1,29 @@
-const db = require("../config/db")
+const pool = require("../config/db")
 const bcrypt = require("bcrypt")
 
 const createAdmin = async () => {
+  try {
 
-try{
+    const existing = await pool.query(
+      "SELECT * FROM users WHERE email=$1",
+      ["ramkrishn@gmail.com"]
+    )
 
-const existing = await db.query(
-"SELECT * FROM users WHERE email='admin@brainstorm.com'"
-)
+    if (existing.rows.length === 0) {
 
-if(existing.rows.length === 0){
+      const hashedPassword = await bcrypt.hash("12345", 10)
 
-// 🔐 hash password
-const hashedPassword = await bcrypt.hash("12345",10)
+      await pool.query(
+        "INSERT INTO users (name,email,role,password) VALUES ($1,$2,$3,$4)",
+        ["Ram Krishna", "ramkrishn@gmail.com", "admin", hashedPassword]
+      )
 
-await db.query(
-"INSERT INTO users (name,email,role,password) VALUES ($1,$2,$3,$4)",
-["Ram Krishna","ramkrishn@gmail.com","admin",hashedPassword]
-)
+      console.log("✅ Admin created")
+    }
 
-console.log("Admin created")
-
-}
-
-}catch(err){
-
-console.error(err)
-
-}
-
+  } catch (err) {
+    console.error("❌ Admin error:", err)
+  }
 }
 
 module.exports = createAdmin
