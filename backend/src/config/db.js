@@ -25,9 +25,10 @@ async function initDB() {
       CREATE TABLE IF NOT EXISTS sessions (
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
+        description TEXT,
         created_by INTEGER REFERENCES users(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+);
     `)
 
     await pool.query(`
