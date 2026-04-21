@@ -1,4 +1,4 @@
-const db = require("../config/db")
+const { pool } = require("../config/db")
 
 exports.createIdea = async (req,res)=>{
 
@@ -6,7 +6,7 @@ try{
 
 const {sessionId,content,category,author} = req.body
 
-const result = await db.query(
+const result = await pool.query(
 
 "INSERT INTO ideas (session_id,content,category,author,votes) VALUES ($1,$2,$3,$4,0) RETURNING *",
 [sessionId,content,category,author]
@@ -30,7 +30,7 @@ try{
 
 const {sessionId} = req.params
 
-const result = await db.query(
+const result = await pool.query(
 
 "SELECT * FROM ideas WHERE session_id=$1",
 [sessionId]
@@ -55,7 +55,7 @@ try{
 const {ideaId} = req.params
 const {userId} = req.body
 
-const user = await db.query(
+const user = await pool.query(
 "SELECT role FROM users WHERE id=$1",
 [userId]
 )
@@ -64,7 +64,7 @@ if(user.rows[0].role !== "admin"){
 return res.status(403).json({error:"Admin only"})
 }
 
-await db.query(
+await pool.query(
 "DELETE FROM ideas WHERE id=$1",
 [ideaId]
 )
