@@ -13,13 +13,16 @@ const reportRoutes = require("./routes/report")
 const createAdmin = require("./utils/createAdmin")
 
 const app = express()
-
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://brainstorm-platform-g7lr59e0u-rkk416s-projects.vercel.app"
-  ]
+    "https://brainstorm-platform-g7lr59e0u-rkk416s-projects.vercel.app",
+    "https://brainstorm-platform-git-master-rkk416s-projects.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }))
+
 app.use(express.json())
 
 // Routes
@@ -27,24 +30,21 @@ app.use("/ideas", ideaRoutes)
 app.use("/votes", voteRoutes)
 app.use("/users", userRoutes)
 app.use("/sessions", sessionRoutes)
-app.use("/report",reportRoutes)
+app.use("/report", reportRoutes)
 
-
-// Create HTTP server
+// Server
 const server = http.createServer(app)
 
-// Setup Socket.io
 const io = new Server(server, {
   cors: {
     origin: "*"
   }
 })
 
-// Load socket logic
 require("./sockets/socket")(io)
 
-// Start server
 createAdmin()
-server.listen(5000, () => {
-  console.log("Server running on port 5000")
+
+server.listen(process.env.PORT || 5000, () => {
+  console.log("Server running")
 })
