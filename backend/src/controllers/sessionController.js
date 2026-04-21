@@ -2,11 +2,15 @@ const sessionModel = require("../models/sessionModel")
 
 exports.createSession = async (req,res)=>{
 
-const {title,description} = req.body
+const { title, description, userId } = req.body
 
 try{
 
-const session = await sessionModel.createSession(title,description)
+const session = await sessionModel.createSession(
+  title,
+  description,
+  userId || 1
+)
 
 res.json(session)
 
