@@ -5,27 +5,28 @@ const cors = require("cors")
 const http = require("http")
 const { Server } = require("socket.io")
 
+// Routes
 const ideaRoutes = require("./routes/ideas")
 const voteRoutes = require("./routes/votes")
 const userRoutes = require("./routes/users")
 const sessionRoutes = require("./routes/sessions")
 const reportRoutes = require("./routes/report")
+
+// Utils
 const createAdmin = require("./utils/createAdmin")
+const { initDB } = require("./config/db")
 
 const app = express()
+
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://brainstorm-platform-g7lr59e0u-rkk416s-projects.vercel.app",
-    "https://brainstorm-platform-git-master-rkk416s-projects.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: true,       
   credentials: true
 }))
 
+app.options("*", cors())
+
 app.use(express.json())
 
-// Routes
 app.use("/ideas", ideaRoutes)
 app.use("/votes", voteRoutes)
 app.use("/users", userRoutes)
@@ -35,6 +36,7 @@ app.use("/report", reportRoutes)
 // Server
 const server = http.createServer(app)
 
+// Socket.io
 const io = new Server(server, {
   cors: {
     origin: "*"
@@ -43,12 +45,10 @@ const io = new Server(server, {
 
 require("./sockets/socket")(io)
 
-const { initDB } = require("./config/db")
-
 async function startServer() {
   try {
-    await initDB()        
-    await createAdmin()   
+    await initDB()       
+    await createAdmin() 
 
     server.listen(process.env.PORT || 5000, () => {
       console.log("Server running")
