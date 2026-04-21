@@ -16,19 +16,24 @@ useEffect(()=>{
 loadSessions()
 },[])
 
-const createSession = async ()=>{
+const createSession = async () => {
+  try {
 
-if(!title.trim()) return
+    if (!title.trim()) return
 
-await api.post("/sessions",{
-  title,
-  description,
-  userId: user?.id || 1
-})
+    await api.post("/sessions", {
+      title,
+      description,
+      userId: user?.id || 1
+    })
 
-setTitle("")
-setDescription("")
-loadSessions()
+    setTitle("")
+    setDescription("")
+    await loadSessions()
+
+  } catch (err) {
+    console.error("CREATE SESSION ERROR:", err.response?.data || err.message)
+  }
 }
 
 return(
