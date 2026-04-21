@@ -59,4 +59,7 @@ async function initDB() {
 }
 initDB()
 
-module.exports = { pool, initDB }
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+  initDB
+}
