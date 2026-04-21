@@ -2,23 +2,29 @@ const sessionModel = require("../models/sessionModel")
 
 exports.createSession = async (req,res)=>{
 
-const { title, description, userId } = req.body
+  const { title, description, userId } = req.body
 
-try{
+  console.log("🔥 BODY:", req.body)
 
-const session = await sessionModel.createSession(
-  title,
-  description,
-  userId || 1
-)
+  try{
 
-res.json(session)
+    const session = await sessionModel.createSession(
+      title,
+      description,
+      userId || 1
+    )
 
-}catch(err){
+    console.log("✅ SESSION CREATED:", session)
 
-res.status(500).json({error:err.message})
+    res.json(session)
 
-}
+  }catch(err){
+
+    console.error("❌ SESSION ERROR:", err)
+
+    res.status(500).json({error:err.message})
+
+  }
 
 }
 
