@@ -1,11 +1,11 @@
 const router = require("express").Router()
-const db = require("../config/db")
+const { pool } = require("../config/db")
 
 router.get("/:sessionId", async (req,res)=>{
 
 const {sessionId} = req.params
 
-const result = await db.query(
+const result = await pool.query(
 `
 SELECT content, category, votes
 FROM ideas
