@@ -3,7 +3,9 @@ const db = require("../config/db")
 exports.createSession = async (title, description, userId) => {
 
   const result = await db.query(
-    "INSERT INTO sessions(title,description,created_by) VALUES($1,$2,$3) RETURNING *",
+    `INSERT INTO sessions(title, description, created_by) 
+     VALUES($1, $2, $3) 
+     RETURNING *`,
     [title, description, userId]
   )
 
