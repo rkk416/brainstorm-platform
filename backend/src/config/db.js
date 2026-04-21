@@ -7,10 +7,10 @@ const pool = new Pool({
     rejectUnauthorized: false  
   }
 })
+
 async function initDB() {
   try {
 
-    // USERS
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -21,7 +21,6 @@ async function initDB() {
       );
     `)
 
-    // SESSIONS
     await pool.query(`
       CREATE TABLE IF NOT EXISTS sessions (
         id SERIAL PRIMARY KEY,
@@ -31,7 +30,6 @@ async function initDB() {
       );
     `)
 
-    // IDEAS
     await pool.query(`
       CREATE TABLE IF NOT EXISTS ideas (
         id SERIAL PRIMARY KEY,
@@ -43,7 +41,6 @@ async function initDB() {
       );
     `)
 
-    // VOTES
     await pool.query(`
       CREATE TABLE IF NOT EXISTS votes (
         id SERIAL PRIMARY KEY,
@@ -59,3 +56,6 @@ async function initDB() {
     console.error("❌ DB INIT ERROR:", err)
   }
 }
+initDB()
+
+module.exports = pool
