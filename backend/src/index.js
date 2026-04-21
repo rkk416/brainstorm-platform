@@ -43,8 +43,20 @@ const io = new Server(server, {
 
 require("./sockets/socket")(io)
 
-createAdmin()
+const { initDB } = require("./config/db")
 
-server.listen(process.env.PORT || 5000, () => {
-  console.log("Server running")
-})
+async function startServer() {
+  try {
+    await initDB()        
+    await createAdmin()   
+
+    server.listen(process.env.PORT || 5000, () => {
+      console.log("Server running")
+    })
+
+  } catch (err) {
+    console.error("❌ Startup error:", err)
+  }
+}
+
+startServer()
