@@ -25,6 +25,8 @@ setPassword("")
 }else{
 
 const res = await api.post("/users/login",{email,password})
+// Persist the JWT so the app can restore this user after a page refresh.
+localStorage.setItem("token",res.data.token)
 setUser(res.data)
 
 }
