@@ -165,16 +165,6 @@ npm run dev
 
 ---
 
-## 📸 Screenshots
-
-* Dashboard UI
-* Login Page
-* Session Creation
-
-(Add screenshots here later for better presentation)
-
----
-
 ## 💡 Why PostgreSQL?
 
 * Structured relational data
